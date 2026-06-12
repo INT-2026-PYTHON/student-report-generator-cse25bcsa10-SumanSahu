@@ -17,3 +17,26 @@ def format_report(records: list[dict]) -> str:
     """
     # TODO: implement
     pass
+
+from .stats import average_per_student,subjects_offered,top_scorer,passing_students
+
+def format_report(records: list[dict]) -> str:
+    total_records = len(records)
+    subjects = sorted(list(subjects_offered(records)))
+    averages = average_per_student(records)
+    top_student, top_avg = top_scorer(records)
+    passers = passing_students(records, threshold=60.0)
+
+    lines = [
+        f"Total records: {total_records}",
+        f"Subjects offered: {', '.join(subjects)}",
+        "Averages:"
+    ]
+    
+    for name in sorted(averages.keys()):
+        lines.append(f"  {name} : {averages[name]}")
+        
+    lines.append(f"Top scorer: {top_student} ({top_avg})")
+    lines.append(f"Passing students (>= 60.0): {', '.join(passers)}")
+    
+    return "\n".join(lines)
